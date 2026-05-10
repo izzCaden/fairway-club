@@ -5,7 +5,7 @@ const fetch = (...args) => import('node-fetch').then(({default: f}) => f(...args
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DATA_FILE = path.join(__dirname, 'data.json');
+const DATA_FILE = process.env.DATA_PATH || path.join(__dirname, 'data.json');
 
 app.use(express.json({ limit: '20mb' })); // Increased for base64 scorecard photos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -78,6 +78,17 @@ app.delete('/api/players/:id/rounds/:rid', (req, res) => {
   if (!player) return res.status(404).json({ error: 'Player not found.' });
   if (player.password !== password) return res.status(403).json({ error: 'Wrong password.' });
   player.rounds = player.rounds.filter(r => r.id !== req.params.rid);
+  saveData(data);
+  res.json({ ok: true });
+});
+
+app.delete('/api/players/:id', (req, res) => {
+  const { password } = req.body;
+  const data = loadData();
+  const player = data.players.find(p => p.id === req.params.id);
+  if (!player) return res.status(404).json({ error: 'Player not found.' });
+  if (player.password !== password) return res.status(403).json({ error: 'Wrong password.' });
+  data.players = data.players.filter(p => p.id !== req.params.id);
   saveData(data);
   res.json({ ok: true });
 });
