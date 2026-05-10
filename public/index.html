@@ -329,7 +329,7 @@ function rLog(el){
       el.querySelectorAll('.star').forEach((st,i) => { st.textContent = i < pickedRating ? '★' : '☆'; });
     });
   });
-  el.querySelector('#l-photo').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;const prev=el.querySelector('#photo-preview');prev.innerHTML='<span style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">Compressing…</span>';photoData=await compressImage(file);prev.innerHTML=`<img src="${photoData}" class="photo-preview-img" />`;prev.querySelector('img').addEventListener('click',()=>showPhoto(photoData));});
+  el.querySelector('#l-photo').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;const prev=el.querySelector('#photo-preview');prev.innerHTML='<span style="font-size:12px;color:var(--muted)">Compressing…</span>';photoData=await compressImage(file);prev.innerHTML=`<img src="${photoData}" class="photo-preview-img" />`;prev.querySelector('img').addEventListener('click',()=>showPhoto(photoData));});
   const gi=id=>{const v=el.querySelector(id)?.value;return v!==''&&v!=null?parseInt(v):null;};
   el.querySelector('#lbtn').addEventListener('click',async()=>{
     const sc=parseInt(el.querySelector('#lsc').value);if(isNaN(sc)){el.querySelector('#log-err').textContent='Please enter a score.';return;}
