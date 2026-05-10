@@ -134,7 +134,35 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;fon
 .ld{text-align:center;padding:70px;color:var(--muted);font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.1em}
 #photo-modal{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:200;display:none;align-items:center;justify-content:center;cursor:pointer}
 #photo-modal img{max-width:95vw;max-height:95vh;border-radius:4px;object-fit:contain}
-@media(max-width:620px){.g2,.g3{grid-template-columns:1fr}.phn{font-size:28px}.rbv{font-size:44px}.user-bar{position:static;justify-content:center;margin-top:14px}.chart-row{grid-template-columns:1fr}.cmp-header{grid-template-columns:1fr 40px 1fr}.cmp-grid{grid-template-columns:1fr}}
+.pro-wrap{max-width:620px;margin:0 auto}
+.pro-intro{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:28px}
+.pro-intro-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin-bottom:6px}
+.pro-intro-sub{font-size:13px;color:var(--muted);font-style:italic;line-height:1.6}
+.pro-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.chip{background:transparent;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;padding:6px 14px;cursor:pointer;transition:all .18s;text-align:left}
+.chip:hover{border-color:var(--gold);color:var(--gold)}
+.pro-chat{display:flex;flex-direction:column;gap:16px;margin-bottom:24px;min-height:0}
+.pro-msg{padding:16px 18px;border-radius:var(--r);line-height:1.7;font-size:14px}
+.pro-msg.user{background:var(--gold-dim);border:1px solid var(--border-s);color:var(--cream);font-style:italic}
+.pro-msg.pro{background:var(--s2);border:1px solid var(--border);color:var(--text)}
+.pro-msg.pro strong{color:var(--gold);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-style:normal}
+.pro-msg ul{margin:8px 0 0 18px}
+.pro-msg li{margin-bottom:4px}
+.pro-thinking{display:flex;align-items:center;gap:10px;color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;font-style:italic;padding:10px 0}
+.pro-dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin:0 2px;animation:dot-bounce .9s infinite}
+.pro-dots span:nth-child(2){animation-delay:.15s}
+.pro-dots span:nth-child(3){animation-delay:.3s}
+@keyframes dot-bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+.pro-input-row{display:flex;gap:10px}
+.pro-input-row input{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);color:var(--cream);font-family:'Lora',serif;font-size:15px;padding:10px 14px;outline:none;transition:border-color .18s}
+.pro-input-row input:focus{border-color:var(--gold)}
+.pro-input-row input::placeholder{color:var(--dim)}
+.pro-send{background:var(--gold);color:#080e09;border:none;border-radius:var(--r);padding:10px 18px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .18s}
+.pro-send:hover{background:var(--gold-l)}
+.pro-send:disabled{opacity:.4;cursor:not-allowed}
+.pro-clear{background:none;border:none;color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:8px 0 0;transition:color .15s}
+.pro-clear:hover{color:var(--muted)}
+@media(max-width:620px){.g2,.g3{grid-template-columns:1fr}.phn{font-size:28px}.rbv{font-size:44px}.user-bar{position:static;justify-content:center;margin-top:14px}.chart-row{grid-template-columns:1fr}.cmp-header{grid-template-columns:1fr 40px 1fr}.cmp-grid{grid-template-columns:1fr}.pro-input-row{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -152,6 +180,7 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;fon
     <button class="nbtn on" data-v="lb">Leaderboard</button>
     <button class="nbtn" data-v="log">Log Round</button>
     <button class="nbtn" data-v="cmp">Compare</button>
+    <button class="nbtn" data-v="pro">Ask the Pro</button>
   </nav>
   <main id="main"><div class="ld">Loading the club…</div></main>
 </div>
@@ -219,7 +248,7 @@ function showPhoto(src){$('photo-modal-img').src=src;$('photo-modal').style.disp
 function go(v,id){activeCharts.forEach(c=>c.destroy());activeCharts=[];view=v;selId=id||null;document.querySelectorAll('.nbtn').forEach(b=>b.classList.toggle('on',b.dataset.v===v));render();}
 $('nav').addEventListener('click',e=>{const b=e.target.closest('.nbtn');if(b)go(b.dataset.v);});
 $('logout-btn').addEventListener('click',()=>{me=null;clearSession();$('nav').style.display='none';$('user-bar').style.display='none';go('auth');});
-function render(){const m=main();if(view==='auth')rAuth(m);else if(view==='lb')rLB(m);else if(view==='log')rLog(m);else if(view==='det')rDet(m);else if(view==='cmp')rCmp(m);}
+function render(){const m=main();if(view==='auth')rAuth(m);else if(view==='lb')rLB(m);else if(view==='log')rLog(m);else if(view==='det')rDet(m);else if(view==='cmp')rCmp(m);else if(view==='pro')rPro(m);}
 
 function rAuth(el){
   el.innerHTML=`<div class="auth-wrap"><div class="auth-tabs"><button class="atab ${authTab==='login'?'on':''}" id="tab-login">Sign In</button><button class="atab ${authTab==='register'?'on':''}" id="tab-register">Create Account</button></div>${authTab==='login'?`<div class="auth-title">Welcome back.</div><div class="auth-sub">Sign in to log rounds and track your season.</div><div class="fg"><label>Your Name</label><input id="l-name" type="text" placeholder="e.g. Tiger Woods" /></div><div class="fg"><label>Password</label><input id="l-pw" type="password" placeholder="••••••••" /></div><div class="err" id="auth-err"></div><button class="btnp" id="auth-submit">Sign In</button>`:`<div class="auth-title">Join the club.</div><div class="auth-sub">Create your account to join the leaderboard.</div><div class="fg"><label>Your Name</label><input id="r-name" type="text" placeholder="e.g. Tiger Woods" /></div><div class="fg"><label>Handicap Index</label><input id="r-hcp" type="number" step="0.1" min="-10" max="54" placeholder="e.g. 18.0" /></div><div class="fg"><label>Password</label><input id="r-pw" type="password" placeholder="Choose a password" /></div><div class="err" id="auth-err"></div><button class="btnp" id="auth-submit">Create Account</button>`}</div>`;
@@ -291,6 +320,135 @@ function rCmp(el){
   el.innerHTML=`<div class="cmp-header"><div class="fg" style="margin:0"><select id="cmp-s1">${opts(cmpIds[0])}</select></div><div class="vs">vs</div><div class="fg" style="margin:0"><select id="cmp-s2">${opts(cmpIds[1])}</select></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;text-align:center"><div><div class="cmp-name">${esc(p1?.name||'—')}</div><div class="cmp-hcp">HCP ${p1?.hcp??'—'} · ${e1.length} badges</div></div><div><div class="cmp-name">${esc(p2?.name||'—')}</div><div class="cmp-hcp">HCP ${p2?.hcp??'—'} · ${e2.length} badges</div></div></div><div class="slbl">Head to Head</div><div class="cmp-grid">${statRow('Avg Score',s1.avs,s2.avs,true)}${statRow('Best Round',s1.best,s2.best,true)}${statRow('Rounds Played',s1.n,s2.n,false)}${statRow('Avg Putts',s1.aputts,s2.aputts,true)}${statRow('Avg Drive',s1.adrive!=null?Math.round(s1.adrive):null,s2.adrive!=null?Math.round(s2.adrive):null,false)}${statRow('Avg GIR',s1.agir,s2.agir,false)}${statRow('FIR %',s1.afir!=null?Math.round(s1.afir):null,s2.afir!=null?Math.round(s2.afir):null,false)}${statRow('Handicap',p1?.hcp,p2?.hcp,true)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><div class="slbl">Badges — ${esc(p1?.name||'')}</div><div style="font-size:18px;letter-spacing:3px;line-height:2">${e1.map(b=>b.emoji).join(' ')||'<span style="font-size:13px;color:var(--muted);font-style:italic">None yet</span>'}</div></div><div><div class="slbl">Badges — ${esc(p2?.name||'')}</div><div style="font-size:18px;letter-spacing:3px;line-height:2">${e2.map(b=>b.emoji).join(' ')||'<span style="font-size:13px;color:var(--muted);font-style:italic">None yet</span>'}</div></div></div>`;
   el.querySelector('#cmp-s1').addEventListener('change',e=>{cmpIds[0]=e.target.value;if(cmpIds[0]===cmpIds[1])cmpIds[1]=players.find(p=>p.id!==cmpIds[0])?.id;rCmp(el);});
   el.querySelector('#cmp-s2').addEventListener('change',e=>{cmpIds[1]=e.target.value;if(cmpIds[1]===cmpIds[0])cmpIds[0]=players.find(p=>p.id!==cmpIds[1])?.id;rCmp(el);});
+}
+
+// ============================================================
+// ASK THE PRO
+// ============================================================
+const PRO_CHIPS = [
+  "I keep topping the ball",
+  "My drives always slice right",
+  "I'm pulling every iron left",
+  "I chunk my chips constantly",
+  "Three-putting all day long",
+  "I can't get out of bunkers",
+  "I'm hitting it fat all the time",
+  "How do I stop rushing my swing?",
+  "My irons go way right (push)",
+  "How should I play from the rough?",
+  "Tips for playing in the wind",
+  "How do I stop shanking the ball?",
+];
+
+let proHistory = []; // [{role, content}]
+
+function rPro(el) {
+  el.innerHTML = `<div class="pro-wrap">
+    <div class="pro-intro">
+      <div class="pro-intro-title">🏌️ Ask the Pro</div>
+      <div class="pro-intro-sub">Got a problem with your game? Describe what's going wrong and get real coaching advice. No judgment — we're all out here trying.</div>
+    </div>
+    <div id="pro-chips" class="pro-chips">${PRO_CHIPS.map(c=>`<button class="chip" data-q="${esc(c)}">${c}</button>`).join('')}</div>
+    <div id="pro-chat" class="pro-chat"></div>
+    <div class="pro-input-row">
+      <input id="pro-input" type="text" placeholder="Describe your problem… e.g. I keep slicing my driver" />
+      <button class="pro-send" id="pro-send">Ask</button>
+    </div>
+    <button class="pro-clear" id="pro-clear">Clear conversation</button>
+  </div>`;
+
+  // Replay existing history
+  renderProChat(el);
+
+  el.querySelector('#pro-send').addEventListener('click', () => askPro(el));
+  el.querySelector('#pro-input').addEventListener('keydown', e => { if (e.key === 'Enter') askPro(el); });
+  el.querySelector('#pro-clear').addEventListener('click', () => { proHistory = []; renderProChat(el); });
+  el.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+    el.querySelector('#pro-input').value = c.dataset.q;
+    askPro(el);
+  }));
+}
+
+function renderProChat(el) {
+  const chat = el.querySelector('#pro-chat');
+  if (!chat) return;
+  if (!proHistory.length) { chat.innerHTML = ''; return; }
+  chat.innerHTML = proHistory.map(m => {
+    if (m.role === 'user') return `<div class="pro-msg user">"${esc(m.content)}"</div>`;
+    return `<div class="pro-msg pro">${formatProResponse(m.content)}</div>`;
+  }).join('');
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function formatProResponse(text) {
+  // Convert markdown-ish to styled HTML
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^#{1,3}\s+(.+)$/gm, '<strong>$1</strong>')
+    .replace(/^[-*]\s+(.+)$/gm, '<li>$1</li>')
+    .replace(/((<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
+
+async function askPro(el) {
+  const input = el.querySelector('#pro-input');
+  const q = input.value.trim();
+  if (!q) return;
+
+  input.value = '';
+  proHistory.push({ role: 'user', content: q });
+  renderProChat(el);
+
+  // Show thinking indicator
+  const chat = el.querySelector('#pro-chat');
+  const thinking = document.createElement('div');
+  thinking.className = 'pro-thinking';
+  thinking.innerHTML = `<div class="pro-dots"><span></span><span></span><span></span></div><span>The pro is thinking…</span>`;
+  chat.appendChild(thinking);
+  chat.scrollTop = chat.scrollHeight;
+
+  const btn = el.querySelector('#pro-send');
+  btn.disabled = true;
+
+  try {
+    const messages = proHistory.map(m => ({ role: m.role, content: m.content }));
+    const res = await fetch('/api/ask-pro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: `You are a friendly, encouraging golf coach helping a group of casual beginner-to-intermediate golfers (handicaps roughly 18-36) who are playing together for fun over the summer and want to improve. 
+
+Your advice should be:
+- Practical and immediately actionable on the course
+- Explained simply — no overly technical jargon
+- Encouraging and never condescending — these players are beginners and just want to have fun
+- Focused on the most common cause of the problem first, then 1-2 quick fixes
+- Concise — 3 to 5 short paragraphs max, use bullet points for drills or tips
+
+When relevant, distinguish between a quick fix they can use mid-round vs. something to work on at the range. Always end on an encouraging note.`,
+        messages,
+      })
+    });
+
+    const data = await res.json();
+    thinking.remove();
+
+    if (!res.ok) throw new Error(data.error?.message || 'API error');
+
+    const reply = data.content?.[0]?.text || 'Sorry, I couldn\'t get a response. Try again!';
+    proHistory.push({ role: 'assistant', content: reply });
+    renderProChat(el);
+  } catch(e) {
+    thinking.remove();
+    proHistory.push({ role: 'assistant', content: `Sorry, something went wrong: ${e.message}. Check that your Anthropic API key is configured on the server.` });
+    renderProChat(el);
+  }
+
+  btn.disabled = false;
+  el.querySelector('#pro-input')?.focus();
 }
 
 async function init(){
