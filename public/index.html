@@ -393,7 +393,7 @@ function buildCourseMap() {
 }
 
 function starsHtml(rating, size=14) {
-  if (!rating) return '<span style="color:var(--dim);font-family:'DM Mono',monospace;font-size:11px">No ratings yet</span>';
+  if (!rating) return `<span style="color:var(--dim);font-family:'DM Mono',monospace;font-size:11px">No ratings yet</span>`;
   const full = Math.round(rating);
   return Array.from({length:5},(_,i)=>`<span style="font-size:${size}px;color:${i<full?'var(--gold)':'var(--dim)'}">${i<full?'★':'☆'}</span>`).join('');
 }
