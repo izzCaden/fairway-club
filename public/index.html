@@ -162,6 +162,29 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;fon
 .pro-send:disabled{opacity:.4;cursor:not-allowed}
 .pro-clear{background:none;border:none;color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:8px 0 0;transition:color .15s}
 .pro-clear:hover{color:var(--muted)}
+/* COURSES */
+.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:34px}
+.course-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;cursor:pointer;transition:border-color .18s,background .18s}
+.course-card:hover{border-color:var(--gold);background:var(--gold-dim)}
+.course-card-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--cream);margin-bottom:6px;line-height:1.2}
+.course-card-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.course-card-stats{display:flex;gap:16px;margin-top:10px}
+.course-stat{text-align:center}
+.course-stat-val{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--gold)}
+.course-stat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:2px}
+.stars{display:flex;gap:3px;align-items:center}
+.star{font-size:16px;cursor:pointer;transition:transform .1s;line-height:1}
+.star:hover{transform:scale(1.2)}
+.stars-display{display:flex;gap:2px;align-items:center}
+.stars-display .star{cursor:default;font-size:14px}
+.star-avg{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);margin-left:6px}
+.course-detail-round{padding:10px 0;border-bottom:.5px solid rgba(201,168,76,.07);display:flex;align-items:flex-start;gap:12px}
+.course-detail-round:last-child{border-bottom:none}
+.cdr-score{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--gold);min-width:42px}
+.cdr-info{flex:1}
+.cdr-player{font-family:'Playfair Display',serif;font-size:15px;color:var(--cream)}
+.cdr-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px}
+.cdr-review{font-size:12px;color:var(--muted);font-style:italic;margin-top:4px}
 @media(max-width:620px){.g2,.g3{grid-template-columns:1fr}.phn{font-size:28px}.rbv{font-size:44px}.user-bar{position:static;justify-content:center;margin-top:14px}.chart-row{grid-template-columns:1fr}.cmp-header{grid-template-columns:1fr 40px 1fr}.cmp-grid{grid-template-columns:1fr}.pro-input-row{flex-direction:column}}
 </style>
 </head>
@@ -180,6 +203,7 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;fon
     <button class="nbtn on" data-v="lb">Leaderboard</button>
     <button class="nbtn" data-v="log">Log Round</button>
     <button class="nbtn" data-v="cmp">Compare</button>
+    <button class="nbtn" data-v="courses">Courses</button>
     <button class="nbtn" data-v="pro">Ask the Pro</button>
   </nav>
   <main id="main"><div class="ld">Loading the club…</div></main>
@@ -248,7 +272,7 @@ function showPhoto(src){$('photo-modal-img').src=src;$('photo-modal').style.disp
 function go(v,id){activeCharts.forEach(c=>c.destroy());activeCharts=[];view=v;selId=id||null;document.querySelectorAll('.nbtn').forEach(b=>b.classList.toggle('on',b.dataset.v===v));render();}
 $('nav').addEventListener('click',e=>{const b=e.target.closest('.nbtn');if(b)go(b.dataset.v);});
 $('logout-btn').addEventListener('click',()=>{me=null;clearSession();$('nav').style.display='none';$('user-bar').style.display='none';go('auth');});
-function render(){const m=main();if(view==='auth')rAuth(m);else if(view==='lb')rLB(m);else if(view==='log')rLog(m);else if(view==='det')rDet(m);else if(view==='cmp')rCmp(m);else if(view==='pro')rPro(m);}
+function render(){const m=main();if(view==='auth')rAuth(m);else if(view==='lb')rLB(m);else if(view==='log')rLog(m);else if(view==='det')rDet(m);else if(view==='cmp')rCmp(m);else if(view==='courses')rCourses(m);else if(view==='pro')rPro(m);}
 
 function rAuth(el){
   el.innerHTML=`<div class="auth-wrap"><div class="auth-tabs"><button class="atab ${authTab==='login'?'on':''}" id="tab-login">Sign In</button><button class="atab ${authTab==='register'?'on':''}" id="tab-register">Create Account</button></div>${authTab==='login'?`<div class="auth-title">Welcome back.</div><div class="auth-sub">Sign in to log rounds and track your season.</div><div class="fg"><label>Your Name</label><input id="l-name" type="text" placeholder="e.g. Tiger Woods" /></div><div class="fg"><label>Password</label><input id="l-pw" type="password" placeholder="••••••••" /></div><div class="err" id="auth-err"></div><button class="btnp" id="auth-submit">Sign In</button>`:`<div class="auth-title">Join the club.</div><div class="auth-sub">Create your account to join the leaderboard.</div><div class="fg"><label>Your Name</label><input id="r-name" type="text" placeholder="e.g. Tiger Woods" /></div><div class="fg"><label>Handicap Index</label><input id="r-hcp" type="number" step="0.1" min="-10" max="54" placeholder="e.g. 18.0" /></div><div class="fg"><label>Password</label><input id="r-pw" type="password" placeholder="Choose a password" /></div><div class="fg"><label>Confirm Password</label><input id="r-pw2" type="password" placeholder="Re-enter your password" /></div><div class="err" id="auth-err"></div><button class="btnp" id="auth-submit">Create Account</button>`}</div>`;
@@ -284,15 +308,33 @@ function rLB(el){
 
 function rLog(el){
   const today=new Date().toISOString().split('T')[0];let photoData=null;
-  el.innerHTML=`<div class="fw"><div class="ft">Log a Round</div><div class="fs">Logging as <strong style="color:var(--gold);font-style:normal">${esc(me.name)}</strong>.</div><div class="g2"><div class="fg"><label>Date</label><input id="ld" type="date" value="${today}" /></div><div class="fg"><label>Course Name</label><input id="lc" type="text" placeholder="Augusta National…" /></div></div><div class="fsec">Score</div><div class="g2"><div class="fg"><label>Gross Score</label><input id="lsc" type="number" min="50" max="200" placeholder="e.g. 105" /></div><div class="fg"><label>Course Par</label><input id="lpar" type="number" value="72" min="60" max="80" /></div></div><div class="fsec">Scoring Breakdown <span style="font-weight:normal;letter-spacing:0;text-transform:none;font-family:'Lora',serif;font-style:italic;opacity:.6;font-size:9px">(optional — should total 18)</span></div><div class="g3"><div class="fg"><label>🦅 Eagles+</label><input id="l-eagles" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>🐦 Birdies</label><input id="l-birdies" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>⛳ Pars</label><input id="l-pars" type="number" min="0" max="18" value="0" class="bd-inp" /></div></div><div class="g3"><div class="fg"><label>+1 Bogeys</label><input id="l-bogeys" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>+2 Doubles</label><input id="l-doubles" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>+3 Triples+</label><input id="l-triples" type="number" min="0" max="18" value="0" class="bd-inp" /></div></div><div id="bd-total" class="bd-total">Total: 0 / 18</div><div class="fsec">On-Course Stats</div><div class="g3"><div class="fg"><label>Fairways Hit</label><input id="lfir" type="number" min="0" max="18" placeholder="e.g. 7" /></div><div class="fg"><label>Of (Total FWs)</label><input id="lfirt" type="number" value="14" min="1" max="18" /></div><div class="fg"><label>GIR (of 18)</label><input id="lgir" type="number" min="0" max="18" placeholder="e.g. 4" /></div></div><div class="g3"><div class="fg"><label>Total Putts</label><input id="lputts" type="number" min="0" placeholder="e.g. 36" /></div><div class="fg"><label>Avg Drive (yds)</label><input id="ldrv" type="number" min="0" placeholder="e.g. 210" /></div><div class="fg"><label>Penalties</label><input id="lpen" type="number" min="0" placeholder="e.g. 3" /></div></div><div class="fsec">Scorecard Photo <span style="font-weight:normal;letter-spacing:0;text-transform:none;font-family:'Lora',serif;font-style:italic;opacity:.6;font-size:9px">(optional)</span></div><div class="fg"><label>Upload Scorecard</label><input id="l-photo" type="file" accept="image/*" style="background:none;border:none;padding:0;color:var(--muted);font-size:13px" /><div id="photo-preview"></div></div><div class="fg"><label>Notes (optional)</label><textarea id="lnotes" rows="2" style="resize:vertical" placeholder="Birdied 18 from the rough…"></textarea></div><div class="err" id="log-err"></div><button class="btnp" id="lbtn">Save Round</button></div>`;
+  el.innerHTML=`<div class="fw"><div class="ft">Log a Round</div><div class="fs">Logging as <strong style="color:var(--gold);font-style:normal">${esc(me.name)}</strong>.</div><div class="g2"><div class="fg"><label>Date</label><input id="ld" type="date" value="${today}" /></div><div class="fg"><label>Course Name</label><input id="lc" type="text" placeholder="Augusta National…" /></div></div><div class="fsec">Score</div><div class="g2"><div class="fg"><label>Gross Score</label><input id="lsc" type="number" min="50" max="200" placeholder="e.g. 105" /></div><div class="fg"><label>Course Par</label><input id="lpar" type="number" value="72" min="60" max="80" /></div></div><div class="fsec">Scoring Breakdown <span style="font-weight:normal;letter-spacing:0;text-transform:none;font-family:'Lora',serif;font-style:italic;opacity:.6;font-size:9px">(optional — should total 18)</span></div><div class="g3"><div class="fg"><label>🦅 Eagles+</label><input id="l-eagles" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>🐦 Birdies</label><input id="l-birdies" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>⛳ Pars</label><input id="l-pars" type="number" min="0" max="18" value="0" class="bd-inp" /></div></div><div class="g3"><div class="fg"><label>+1 Bogeys</label><input id="l-bogeys" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>+2 Doubles</label><input id="l-doubles" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>+3 Triples+</label><input id="l-triples" type="number" min="0" max="18" value="0" class="bd-inp" /></div></div><div id="bd-total" class="bd-total">Total: 0 / 18</div><div class="fsec">On-Course Stats</div><div class="g3"><div class="fg"><label>Fairways Hit</label><input id="lfir" type="number" min="0" max="18" placeholder="e.g. 7" /></div><div class="fg"><label>Of (Total FWs)</label><input id="lfirt" type="number" value="14" min="1" max="18" /></div><div class="fg"><label>GIR (of 18)</label><input id="lgir" type="number" min="0" max="18" placeholder="e.g. 4" /></div></div><div class="g3"><div class="fg"><label>Total Putts</label><input id="lputts" type="number" min="0" placeholder="e.g. 36" /></div><div class="fg"><label>Avg Drive (yds)</label><input id="ldrv" type="number" min="0" placeholder="e.g. 210" /></div><div class="fg"><label>Penalties</label><input id="lpen" type="number" min="0" placeholder="e.g. 3" /></div></div><div class="fsec">Scorecard Photo <span style="font-weight:normal;letter-spacing:0;text-transform:none;font-family:'Lora',serif;font-style:italic;opacity:.6;font-size:9px">(optional)</span></div><div class="fg"><label>Upload Scorecard</label><input id="l-photo" type="file" accept="image/*" style="background:none;border:none;padding:0;color:var(--muted);font-size:13px" /><div id="photo-preview"></div></div><div class="fg"><label>Notes (optional)</label><textarea id="lnotes" rows="2" style="resize:vertical" placeholder="Birdied 18 from the rough…"></textarea></div><div class="fsec">Rate the Course <span style="font-weight:normal;letter-spacing:0;text-transform:none;font-family:'Lora',serif;font-style:italic;opacity:.6;font-size:9px">(optional)</span></div><div class="fg"><label>Your Rating</label><div class="stars" id="star-picker" style="margin-bottom:8px"><span class="star" data-v="1">☆</span><span class="star" data-v="2">☆</span><span class="star" data-v="3">☆</span><span class="star" data-v="4">☆</span><span class="star" data-v="5">☆</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);margin-left:8px" id="star-label">Tap to rate</span></div></div><div class="fg"><label>Course Review <span style="opacity:.5;text-transform:none;letter-spacing:0;font-style:italic;font-family:'Lora',serif">(optional)</span></label><input id="lcreview" type="text" placeholder="Great greens, tough back 9…" /></div><div class="err" id="log-err"></div><button class="btnp" id="lbtn">Save Round</button></div>`;
   const updateTotal=()=>{const total=Array.from(el.querySelectorAll('.bd-inp')).reduce((s,i)=>s+(parseInt(i.value)||0),0);const div=el.querySelector('#bd-total');div.textContent=`Total: ${total} / 18`;div.className='bd-total'+(total===18?' ok':'');};
   el.querySelectorAll('.bd-inp').forEach(i=>i.addEventListener('input',updateTotal));
+  // Star picker
+  let pickedRating = 0;
+  el.querySelectorAll('.star').forEach(s => {
+    s.addEventListener('click', () => {
+      pickedRating = parseInt(s.dataset.v);
+      el.querySelectorAll('.star').forEach((st,i) => { st.textContent = i < pickedRating ? '★' : '☆'; });
+      const labels = ['','Poor','Fair','Good','Great','Amazing!'];
+      el.querySelector('#star-label').textContent = labels[pickedRating];
+      el.querySelector('#star-label').style.color = 'var(--gold)';
+    });
+    s.addEventListener('mouseover', () => {
+      const v = parseInt(s.dataset.v);
+      el.querySelectorAll('.star').forEach((st,i) => { st.textContent = i < v ? '★' : '☆'; });
+    });
+    s.addEventListener('mouseout', () => {
+      el.querySelectorAll('.star').forEach((st,i) => { st.textContent = i < pickedRating ? '★' : '☆'; });
+    });
+  });
   el.querySelector('#l-photo').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;const prev=el.querySelector('#photo-preview');prev.innerHTML='<span style="font-size:12px;color:var(--muted);font-family:DM Mono,monospace">Compressing…</span>';photoData=await compressImage(file);prev.innerHTML=`<img src="${photoData}" class="photo-preview-img" />`;prev.querySelector('img').addEventListener('click',()=>showPhoto(photoData));});
   const gi=id=>{const v=el.querySelector(id)?.value;return v!==''&&v!=null?parseInt(v):null;};
   el.querySelector('#lbtn').addEventListener('click',async()=>{
     const sc=parseInt(el.querySelector('#lsc').value);if(isNaN(sc)){el.querySelector('#log-err').textContent='Please enter a score.';return;}
     const btn=el.querySelector('#lbtn');btn.disabled=true;
-    try{const round={password:me._pw,date:el.querySelector('#ld').value||today,course:el.querySelector('#lc').value.trim()||null,score:sc,par:gi('#lpar')||72,eagles:parseInt(el.querySelector('#l-eagles').value)||0,birdies:parseInt(el.querySelector('#l-birdies').value)||0,pars:parseInt(el.querySelector('#l-pars').value)||0,bogeys:parseInt(el.querySelector('#l-bogeys').value)||0,doubles:parseInt(el.querySelector('#l-doubles').value)||0,triples:parseInt(el.querySelector('#l-triples').value)||0,fir:gi('#lfir'),firT:gi('#lfirt')||14,gir:gi('#lgir'),putts:gi('#lputts'),drive:gi('#ldrv'),pen:gi('#lpen'),notes:el.querySelector('#lnotes').value.trim()||null,photo:photoData||null};await api('POST',`/api/players/${me.id}/rounds`,round);players=await api('GET','/api/players');const updated=players.find(p=>p.id===me.id);if(updated)me={...me,rounds:updated.rounds};notify('Round saved! 🏌️');go('lb');}catch(e){el.querySelector('#log-err').textContent=e.message;btn.disabled=false;}
+    try{const round={password:me._pw,date:el.querySelector('#ld').value||today,course:el.querySelector('#lc').value.trim()||null,score:sc,par:gi('#lpar')||72,eagles:parseInt(el.querySelector('#l-eagles').value)||0,birdies:parseInt(el.querySelector('#l-birdies').value)||0,pars:parseInt(el.querySelector('#l-pars').value)||0,bogeys:parseInt(el.querySelector('#l-bogeys').value)||0,doubles:parseInt(el.querySelector('#l-doubles').value)||0,triples:parseInt(el.querySelector('#l-triples').value)||0,fir:gi('#lfir'),firT:gi('#lfirt')||14,gir:gi('#lgir'),putts:gi('#lputts'),drive:gi('#ldrv'),pen:gi('#lpen'),notes:el.querySelector('#lnotes').value.trim()||null,photo:photoData||null,courseRating:pickedRating||null,courseReview:el.querySelector('#lcreview').value.trim()||null};await api('POST',`/api/players/${me.id}/rounds`,round);players=await api('GET','/api/players');const updated=players.find(p=>p.id===me.id);if(updated)me={...me,rounds:updated.rounds};notify('Round saved! 🏌️');go('lb');}catch(e){el.querySelector('#log-err').textContent=e.message;btn.disabled=false;}
   });
 }
 
@@ -332,6 +374,110 @@ function rCmp(el){
   el.innerHTML=`<div class="cmp-header"><div class="fg" style="margin:0"><select id="cmp-s1">${opts(cmpIds[0])}</select></div><div class="vs">vs</div><div class="fg" style="margin:0"><select id="cmp-s2">${opts(cmpIds[1])}</select></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;text-align:center"><div><div class="cmp-name">${esc(p1?.name||'—')}</div><div class="cmp-hcp">HCP ${p1?.hcp??'—'} · ${e1.length} badges</div></div><div><div class="cmp-name">${esc(p2?.name||'—')}</div><div class="cmp-hcp">HCP ${p2?.hcp??'—'} · ${e2.length} badges</div></div></div><div class="slbl">Head to Head</div><div class="cmp-grid">${statRow('Avg Score',s1.avs,s2.avs,true)}${statRow('Best Round',s1.best,s2.best,true)}${statRow('Rounds Played',s1.n,s2.n,false)}${statRow('Avg Putts',s1.aputts,s2.aputts,true)}${statRow('Avg Drive',s1.adrive!=null?Math.round(s1.adrive):null,s2.adrive!=null?Math.round(s2.adrive):null,false)}${statRow('Avg GIR',s1.agir,s2.agir,false)}${statRow('FIR %',s1.afir!=null?Math.round(s1.afir):null,s2.afir!=null?Math.round(s2.afir):null,false)}${statRow('Handicap',p1?.hcp,p2?.hcp,true)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><div class="slbl">Badges — ${esc(p1?.name||'')}</div><div style="font-size:18px;letter-spacing:3px;line-height:2">${e1.map(b=>b.emoji).join(' ')||'<span style="font-size:13px;color:var(--muted);font-style:italic">None yet</span>'}</div></div><div><div class="slbl">Badges — ${esc(p2?.name||'')}</div><div style="font-size:18px;letter-spacing:3px;line-height:2">${e2.map(b=>b.emoji).join(' ')||'<span style="font-size:13px;color:var(--muted);font-style:italic">None yet</span>'}</div></div></div>`;
   el.querySelector('#cmp-s1').addEventListener('change',e=>{cmpIds[0]=e.target.value;if(cmpIds[0]===cmpIds[1])cmpIds[1]=players.find(p=>p.id!==cmpIds[0])?.id;rCmp(el);});
   el.querySelector('#cmp-s2').addEventListener('change',e=>{cmpIds[1]=e.target.value;if(cmpIds[1]===cmpIds[0])cmpIds[0]=players.find(p=>p.id!==cmpIds[1])?.id;rCmp(el);});
+}
+
+// ============================================================
+// COURSES
+// ============================================================
+function buildCourseMap() {
+  const map = {}; // normalized name -> {name, rounds:[{player,round}]}
+  for (const player of players) {
+    for (const round of (player.rounds||[])) {
+      if (!round.course) continue;
+      const key = round.course.trim().toLowerCase();
+      if (!map[key]) map[key] = { name: round.course.trim(), rounds: [] };
+      map[key].rounds.push({ player, round });
+    }
+  }
+  return Object.values(map).sort((a,b) => b.rounds.length - a.rounds.length);
+}
+
+function starsHtml(rating, size=14) {
+  if (!rating) return '<span style="color:var(--dim);font-family:'DM Mono',monospace;font-size:11px">No ratings yet</span>';
+  const full = Math.round(rating);
+  return Array.from({length:5},(_,i)=>`<span style="font-size:${size}px;color:${i<full?'var(--gold)':'var(--dim)'}">${i<full?'★':'☆'}</span>`).join('');
+}
+
+function courseAvgRating(rounds) {
+  const rated = rounds.filter(({round}) => round.courseRating);
+  if (!rated.length) return null;
+  return rated.reduce((s,{round}) => s + round.courseRating, 0) / rated.length;
+}
+
+function rCourses(el) {
+  const courses = buildCourseMap();
+  if (!courses.length) {
+    el.innerHTML = `<div class="slbl">Course Log</div><div class="empty"><strong>No courses logged yet.</strong>Start logging rounds to build the course map.</div>`;
+    return;
+  }
+
+  const cards = courses.map(c => {
+    const avg = courseAvgRating(c.rounds);
+    const scores = c.rounds.map(({round}) => round.score).filter(Boolean);
+    const best = scores.length ? Math.min(...scores) : null;
+    const players_set = [...new Set(c.rounds.map(({player}) => player.name))];
+    return `<div class="course-card" data-key="${esc(c.name.toLowerCase())}">
+      <div class="course-card-name">${esc(c.name)}</div>
+      <div style="margin-bottom:8px">${starsHtml(avg)}${avg?`<span class="star-avg">${avg.toFixed(1)}</span>`:''}</div>
+      <div class="course-card-stats">
+        <div class="course-stat"><div class="course-stat-val">${c.rounds.length}</div><div class="course-stat-lbl">Rounds</div></div>
+        ${best!=null?`<div class="course-stat"><div class="course-stat-val">${best}</div><div class="course-stat-lbl">Best</div></div>`:''}
+        <div class="course-stat"><div class="course-stat-val">${players_set.length}</div><div class="course-stat-lbl">Player${players_set.length!==1?'s':''}</div></div>
+      </div>
+      <div class="course-card-meta" style="margin-top:10px;margin-bottom:0">${players_set.map(n=>esc(n)).join(' · ')}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div class="slbl">Course Log <span style="font-size:11px;font-family:'Lora',serif;font-style:italic;letter-spacing:0;text-transform:none;color:var(--muted)">${courses.length} course${courses.length!==1?'s':''} played this summer</span></div>
+    <div class="course-grid">${cards}</div>`;
+
+  el.querySelectorAll('.course-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const key = card.dataset.key;
+      const course = courses.find(c => c.name.toLowerCase() === key);
+      if (course) showCourseDetail(el, course, courses);
+    });
+  });
+}
+
+function showCourseDetail(el, course, allCourses) {
+  const avg = courseAvgRating(course.rounds);
+  const sorted = [...course.rounds].sort((a,b) => a.round.score - b.round.score);
+  const reviews = course.rounds.filter(({round}) => round.courseReview || round.courseRating);
+
+  const roundRows = sorted.map(({player,round}) => {
+    const diff = round.par != null ? round.score - round.par : null;
+    const rl = diff===null?'':diff===0?' · E':diff>0?` · +${diff}`:` · ${diff}`;
+    return `<div class="course-detail-round">
+      <div class="cdr-score">${round.score}</div>
+      <div class="cdr-info">
+        <div class="cdr-player">${esc(player.name)}${rl?`<span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">${rl}</span>`:''}</div>
+        <div class="cdr-meta">${round.date||''}${round.courseRating?` · ${starsHtml(round.courseRating,12)}`:''}</div>
+        ${round.courseReview?`<div class="cdr-review">"${esc(round.courseReview)}"</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <button class="bbk" id="bbk">← All Courses</button>
+    <div class="phero">
+      <div>
+        <div class="phn">${esc(course.name)}</div>
+        <div style="margin-top:8px;display:flex;align-items:center;gap:8px">
+          ${starsHtml(avg, 22)}
+          ${avg?`<span style="font-family:'DM Mono',monospace;font-size:18px;color:var(--gold);font-weight:500">${avg.toFixed(1)}</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">(${reviews.length} rating${reviews.length!==1?'s':''})</span>`:''}
+        </div>
+      </div>
+      <div class="rbadge-wrap">
+        <div class="rbl">Rounds Here</div>
+        <div class="rbv">${course.rounds.length}</div>
+      </div>
+    </div>
+    <div class="slbl">All Rounds</div>
+    <div>${roundRows}</div>
+  `;
+
+  el.querySelector('#bbk').addEventListener('click', () => rCourses(el));
 }
 
 // ============================================================
