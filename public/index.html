@@ -7,19 +7,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#080e09;--s1:#0d1810;--s2:#122016;--s3:#1a2d1e;
-  --gold:#c9a84c;--gold-l:#dfc06a;--gold-dim:rgba(201,168,76,.12);
-  --cream:#ede2c8;--text:#d4cbb4;--muted:#6b8572;--dim:#3c5243;
-  --border:rgba(201,168,76,.18);--border-s:rgba(201,168,76,.38);
-  --red:#c95a3a;--green:#52a86e;--r:4px;
-  --shadow:0 8px 32px rgba(0,0,0,.5);
-}
+:root{--bg:#080e09;--s1:#0d1810;--s2:#122016;--s3:#1a2d1e;--gold:#c9a84c;--gold-l:#dfc06a;--gold-dim:rgba(201,168,76,.12);--cream:#ede2c8;--text:#d4cbb4;--muted:#6b8572;--dim:#3c5243;--border:rgba(201,168,76,.18);--border-s:rgba(201,168,76,.38);--red:#c95a3a;--green:#52a86e;--r:4px;--shadow:0 8px 32px rgba(0,0,0,.5);}
 html,body{min-height:100vh}
-body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;font-size:15px;line-height:1.6;
-  background-image:radial-gradient(ellipse at 20% 0%,rgba(30,70,35,.22) 0%,transparent 55%),radial-gradient(ellipse at 80% 100%,rgba(15,45,20,.2) 0%,transparent 55%);}
+body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;font-size:15px;line-height:1.6;background-image:radial-gradient(ellipse at 20% 0%,rgba(30,70,35,.22) 0%,transparent 55%),radial-gradient(ellipse at 80% 100%,rgba(15,45,20,.2) 0%,transparent 55%);}
 .app{max-width:900px;margin:0 auto;padding:0 24px 80px}
 .hdr{text-align:center;padding:52px 0 32px;border-bottom:1px solid var(--border);margin-bottom:40px;position:relative}
 .eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
@@ -59,6 +52,9 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;fon
 .btns{background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all .15s}
 .btns:hover{border-color:var(--gold);color:var(--gold)}
 .err{font-family:'DM Mono',monospace;font-size:12px;color:var(--red);margin-top:10px;min-height:18px}
+.fw{max-width:560px;margin:0 auto}
+.ft{font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);margin-bottom:6px}
+.fs{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:28px}
 .lbt{width:100%;border-collapse:collapse}
 .lbt th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);padding:7px 12px;text-align:left;border-bottom:1px solid var(--border)}
 .lbt th.r,.lbt td.r{text-align:right}
@@ -72,17 +68,23 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;fon
 .pname{font-family:'Playfair Display',serif;font-size:19px;color:var(--cream)}
 .pme{font-size:10px;font-family:'DM Mono',monospace;color:var(--gold);margin-left:7px;letter-spacing:.1em;vertical-align:middle}
 .psub{font-size:11px;color:var(--muted);font-style:italic;margin-top:2px}
+.pbadges{font-size:14px;margin-top:3px;letter-spacing:2px}
 .hv{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--gold);text-align:right}
 .sv{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);text-align:right}
 .empty{text-align:center;padding:60px 20px;color:var(--muted);font-style:italic}
 .empty strong{display:block;font-size:17px;color:var(--muted);font-weight:400;margin-bottom:6px}
+.activity{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:28px}
+.activity-item{font-size:13px;color:var(--text);padding:5px 0;border-bottom:1px solid rgba(201,168,76,.07);display:flex;align-items:center;gap:8px}
+.activity-item:last-child{border-bottom:none;padding-bottom:0}
+.activity-item:first-child{padding-top:0}
+.activity-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);margin-left:auto;white-space:nowrap}
 .bbk{background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:0;margin-bottom:26px;transition:color .15s;display:flex;align-items:center;gap:6px}
 .bbk:hover{color:var(--gold)}
 .phero{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:34px;padding-bottom:22px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:14px}
 .phn{font-family:'Playfair Display',serif;font-size:40px;font-weight:400;color:var(--cream);line-height:1;margin-bottom:8px}
 .phhl{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
 .phhv{font-family:'DM Mono',monospace;font-size:26px;font-weight:500;color:var(--gold);margin-left:6px}
-.rbadge{text-align:right}
+.rbadge-wrap{text-align:right}
 .rbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px}
 .rbv{font-family:'Playfair Display',serif;font-size:62px;color:var(--gold);line-height:1}
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:9px;margin-bottom:34px}
@@ -90,6 +92,17 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;fon
 .scl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
 .scv{font-family:'DM Mono',monospace;font-size:21px;font-weight:500;color:var(--cream)}
 .scv.ac{color:var(--gold)}
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:10px;margin-bottom:34px}
+.badge{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:14px 10px;text-align:center}
+.badge.earned{border-color:var(--gold);background:var(--gold-dim)}
+.badge.locked{opacity:.32}
+.badge-emoji{font-size:26px;margin-bottom:6px}
+.badge-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--cream);margin-bottom:3px}
+.badge-desc{font-size:11px;color:var(--muted);font-style:italic;line-height:1.4}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:34px}
+.chart-box{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.chart-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.chart-empty{font-size:13px;color:var(--dim);font-style:italic;text-align:center;padding:30px 0}
 .rt{width:100%;border-collapse:collapse;font-size:12px}
 .rt th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding:5px 8px;border-bottom:1px solid var(--border);text-align:left}
 .rt td{padding:9px 8px;border-bottom:1px solid rgba(201,168,76,.06);font-family:'DM Mono',monospace;color:var(--text);vertical-align:middle}
@@ -100,15 +113,28 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;fon
 .se{background:rgba(201,168,76,.15);color:var(--gold)}
 .db{background:none;border:none;color:var(--dim);cursor:pointer;font-size:13px;padding:0 3px;transition:color .15s}
 .db:hover{color:var(--red)}
+.thumb{width:28px;height:28px;object-fit:cover;border-radius:2px;cursor:pointer;border:1px solid var(--border)}
+.thumb:hover{border-color:var(--gold)}
 .he{display:flex;align-items:center;gap:8px;margin-top:8px}
 .he input{width:90px}
-.fw{max-width:560px;margin:0 auto}
-.ft{font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);margin-bottom:6px}
-.fs{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:28px}
-.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--border-s);border-radius:var(--r);padding:10px 20px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--cream);box-shadow:var(--shadow);z-index:99;animation:fuUp .22s ease;white-space:nowrap}
+.bd-total{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin:4px 0 8px;transition:color .2s}
+.bd-total.ok{color:var(--green)}
+.photo-preview-img{max-width:180px;border-radius:var(--r);border:1px solid var(--border);margin-top:8px;display:block;cursor:pointer}
+.cmp-header{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;gap:10px;margin-bottom:24px}
+.vs{font-family:'Playfair Display',serif;font-size:22px;color:var(--dim);text-align:center;font-style:italic}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.cmp-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center}
+.cmp-card.win{border-color:var(--gold);background:var(--gold-dim)}
+.cmp-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.cmp-val{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--cream)}
+.cmp-name{font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin-bottom:4px;text-align:center}
+.cmp-hcp{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);text-align:center;margin-bottom:16px}
+.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--border-s);border-radius:var(--r);padding:10px 20px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--cream);box-shadow:var(--shadow);z-index:99;animation:fuUp .22s ease;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 @keyframes fuUp{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .ld{text-align:center;padding:70px;color:var(--muted);font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.1em}
-@media(max-width:580px){.g2,.g3{grid-template-columns:1fr}.phn{font-size:28px}.rbv{font-size:44px}.user-bar{position:static;justify-content:center;margin-top:14px}}
+#photo-modal{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:200;display:none;align-items:center;justify-content:center;cursor:pointer}
+#photo-modal img{max-width:95vw;max-height:95vh;border-radius:4px;object-fit:contain}
+@media(max-width:620px){.g2,.g3{grid-template-columns:1fr}.phn{font-size:28px}.rbv{font-size:44px}.user-bar{position:static;justify-content:center;margin-top:14px}.chart-row{grid-template-columns:1fr}.cmp-header{grid-template-columns:1fr 40px 1fr}.cmp-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -125,223 +151,150 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;fon
   <nav class="nav" id="nav" style="display:none">
     <button class="nbtn on" data-v="lb">Leaderboard</button>
     <button class="nbtn" data-v="log">Log Round</button>
+    <button class="nbtn" data-v="cmp">Compare</button>
   </nav>
   <main id="main"><div class="ld">Loading the club…</div></main>
 </div>
+<div id="photo-modal"><img id="photo-modal-img" /></div>
 <script>
-let players = [], me = null, view = 'auth', selId = null, authTab = 'login', nT = null;
-const $ = id => document.getElementById(id);
-const main = () => $('main');
-const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : null;
-async function api(method, path, body) {
-  const res = await fetch(path, { method, headers: {'Content-Type':'application/json'}, body: body ? JSON.stringify(body) : undefined });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Something went wrong.');
+const BADGES=[
+  {id:'first_round',emoji:'🏌️',name:'Off the Tee',desc:'Logged your first round',check:p=>p.rounds.length>=1},
+  {id:'five_rounds',emoji:'📅',name:'Five & Counting',desc:'Logged 5 rounds',check:p=>p.rounds.length>=5},
+  {id:'ten_rounds',emoji:'🏆',name:'Dedicated',desc:'Logged 10 rounds',check:p=>p.rounds.length>=10},
+  {id:'first_par',emoji:'⛳',name:'Par Hunter',desc:'Got at least one par in a round',check:p=>p.rounds.some(r=>(r.pars||0)>0)},
+  {id:'first_birdie',emoji:'🐦',name:'Birdie!',desc:'Scored your first birdie ever',check:p=>p.rounds.some(r=>(r.birdies||0)>0)},
+  {id:'eagle',emoji:'🦅',name:'Eagle Eye',desc:'Scored an eagle or better — legendary',check:p=>p.rounds.some(r=>(r.eagles||0)>0)},
+  {id:'broke_100',emoji:'💯',name:'Sub-100',desc:'Shot 99 or better',check:p=>p.rounds.some(r=>r.score!=null&&r.score<=99)},
+  {id:'broke_90',emoji:'🔥',name:'Sub-90',desc:'Shot 89 or better',check:p=>p.rounds.some(r=>r.score!=null&&r.score<=89)},
+  {id:'broke_80',emoji:'👑',name:'Sub-80',desc:'Shot 79 or better — elite',check:p=>p.rounds.some(r=>r.score!=null&&r.score<=79)},
+  {id:'triple_free',emoji:'🛡️',name:'Triple Free',desc:'Finished a round with zero triple bogeys',check:p=>p.rounds.some(r=>r.triples!=null&&r.triples===0)},
+  {id:'bogey_machine',emoji:'🎳',name:'Bogey Machine',desc:'10+ bogeys in a single round',check:p=>p.rounds.some(r=>(r.bogeys||0)>=10)},
+  {id:'putting_pro',emoji:'🎱',name:'Putting Pro',desc:'Under 32 putts in a round',check:p=>p.rounds.some(r=>r.putts!=null&&r.putts<32)},
+  {id:'fairway_finder',emoji:'🎯',name:'Fairway Finder',desc:'Hit 50%+ of fairways in a round',check:p=>p.rounds.some(r=>r.fir!=null&&r.fir/(r.firT||14)>=0.5)},
+  {id:'consistent',emoji:'📊',name:'Consistent',desc:'Last 5 rounds within 8 strokes of each other',check:p=>{const sc=p.rounds.slice(-5).map(r=>r.score).filter(Boolean);return sc.length>=5&&Math.max(...sc)-Math.min(...sc)<=8;}},
+  {id:'hot_streak',emoji:'🌶️',name:'Hot Streak',desc:'Improved your score 3 rounds in a row',check:p=>{const sc=[...p.rounds].sort((a,b)=>new Date(a.date)-new Date(b.date)).map(r=>r.score).filter(Boolean);for(let i=3;i<sc.length;i++)if(sc[i]<sc[i-1]&&sc[i-1]<sc[i-2]&&sc[i-2]<sc[i-3])return true;return false;}},
+  {id:'photo_proof',emoji:'📸',name:'Scorecard Star',desc:'Uploaded a scorecard photo',check:p=>p.rounds.some(r=>r.photo)},
+  {id:'big_hitter',emoji:'🚀',name:'Big Hitter',desc:'Averaged 240+ yards in a round',check:p=>p.rounds.some(r=>r.drive!=null&&r.drive>=240)},
+];
+function earnedBadges(player){return BADGES.filter(b=>{try{return b.check({...player,rounds:player.rounds||[]});}catch{return false;}});}
+
+let players=[],me=null,view='auth',selId=null,cmpIds=[null,null],authTab='login',activeCharts=[];
+const $=id=>document.getElementById(id);
+const main=()=>$('main');
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const fmtDate=d=>{if(!d)return'—';const[,m,day]=d.split('-');return`${m}/${day}`;};
+
+async function api(method,path,body){
+  const res=await fetch(path,{method,headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error||'Something went wrong.');
   return data;
 }
-function saveSession() { if (me) localStorage.setItem('fc_session', JSON.stringify({id:me.id,name:me.name,password:me._pw})); }
-function clearSession() { localStorage.removeItem('fc_session'); }
-function getSession() { try { return JSON.parse(localStorage.getItem('fc_session')); } catch { return null; } }
-function notify(msg) {
-  document.querySelectorAll('.notif').forEach(n=>n.remove());
-  if (nT) clearTimeout(nT);
-  const el = document.createElement('div'); el.className='notif'; el.textContent=msg;
-  document.body.appendChild(el); nT = setTimeout(()=>el.remove(), 3200);
+function saveSession(){if(me)localStorage.setItem('fc_session',JSON.stringify({id:me.id,name:me.name,password:me._pw}));}
+function clearSession(){localStorage.removeItem('fc_session');}
+function getSession(){try{return JSON.parse(localStorage.getItem('fc_session'));}catch{return null;}}
+
+let notifQueue=[],notifRunning=false;
+function notify(msg){notifQueue.push(msg);if(!notifRunning)runQ();}
+function runQ(){if(!notifQueue.length){notifRunning=false;return;}notifRunning=true;document.querySelectorAll('.notif').forEach(n=>n.remove());const el=document.createElement('div');el.className='notif';el.textContent=notifQueue.shift();document.body.appendChild(el);setTimeout(()=>{el.remove();setTimeout(runQ,300);},3500);}
+
+function checkActivity(){
+  const lastVisit=localStorage.getItem('fc_last_visit')||new Date(0).toISOString();
+  const nr=[];
+  for(const p of players){if(me&&p.id===me.id)continue;for(const r of(p.rounds||[])){if(r.createdAt&&r.createdAt>lastVisit)nr.push({player:p,round:r});}}
+  nr.sort((a,b)=>new Date(b.round.createdAt)-new Date(a.round.createdAt));
+  nr.slice(0,3).forEach(({player,round})=>{notify(`🏌️ ${player.name} logged a ${round.score}${round.course?` at ${round.course}`:''}`)});
+  localStorage.setItem('fc_last_visit',new Date().toISOString());
 }
-function sorted() { return [...players].sort((a,b)=>a.hcp-b.hcp); }
-function pstats(rounds) {
-  const scores = (rounds||[]).map(r=>r.score).filter(v=>v!=null);
-  return {
-    avs: avg(scores), best: scores.length?Math.min(...scores):null,
-    aputts: avg((rounds||[]).filter(r=>r.putts!=null).map(r=>r.putts)),
-    adrive: avg((rounds||[]).filter(r=>r.drive!=null).map(r=>r.drive)),
-    agir: avg((rounds||[]).filter(r=>r.gir!=null).map(r=>r.gir)),
-    afir: avg((rounds||[]).filter(r=>r.fir!=null).map(r=>(r.fir/(r.firT||14))*100)),
-    n: (rounds||[]).length
-  };
-}
-function go(v, id) {
-  view=v; selId=id||null;
-  document.querySelectorAll('.nbtn').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
-  render();
-}
-$('nav').addEventListener('click', e=>{ const b=e.target.closest('.nbtn'); if(b) go(b.dataset.v); });
-$('logout-btn').addEventListener('click', ()=>{ me=null; clearSession(); $('nav').style.display='none'; $('user-bar').style.display='none'; go('auth'); });
-function render() {
-  const m=main();
-  if(view==='auth') rAuth(m);
-  else if(view==='lb') rLB(m);
-  else if(view==='log') rLog(m);
-  else if(view==='det') rDet(m);
-}
-function rAuth(el) {
-  el.innerHTML=`<div class="auth-wrap">
-    <div class="auth-tabs">
-      <button class="atab ${authTab==='login'?'on':''}" id="tab-login">Sign In</button>
-      <button class="atab ${authTab==='register'?'on':''}" id="tab-register">Create Account</button>
-    </div>
-    ${authTab==='login'?`
-      <div class="auth-title">Welcome back.</div>
-      <div class="auth-sub">Sign in to log rounds and track your season.</div>
-      <div class="fg"><label>Your Name</label><input id="l-name" type="text" placeholder="e.g. Tiger Woods" /></div>
-      <div class="fg"><label>Password</label><input id="l-pw" type="password" placeholder="••••••••" /></div>
-      <div class="err" id="auth-err"></div>
-      <button class="btnp" id="auth-submit">Sign In</button>
-    `:`
-      <div class="auth-title">Join the club.</div>
-      <div class="auth-sub">Create your account to join the leaderboard.</div>
-      <div class="fg"><label>Your Name</label><input id="r-name" type="text" placeholder="e.g. Tiger Woods" /></div>
-      <div class="fg"><label>Handicap Index</label><input id="r-hcp" type="number" step="0.1" min="-10" max="54" placeholder="e.g. 12.4" /></div>
-      <div class="fg"><label>Password</label><input id="r-pw" type="password" placeholder="Choose a password" /></div>
-      <div class="err" id="auth-err"></div>
-      <button class="btnp" id="auth-submit">Create Account</button>
-    `}
-  </div>`;
+
+function timeAgo(iso){if(!iso)return'';const diff=Date.now()-new Date(iso).getTime();const m=Math.floor(diff/60000),h=Math.floor(diff/3600000),d=Math.floor(diff/86400000);if(d>0)return`${d}d ago`;if(h>0)return`${h}h ago`;if(m>0)return`${m}m ago`;return'just now';}
+function sorted(){return[...players].sort((a,b)=>a.hcp-b.hcp);}
+function pstats(rounds){const scores=(rounds||[]).map(r=>r.score).filter(v=>v!=null);return{avs:avg(scores),best:scores.length?Math.min(...scores):null,aputts:avg((rounds||[]).filter(r=>r.putts!=null).map(r=>r.putts)),adrive:avg((rounds||[]).filter(r=>r.drive!=null).map(r=>r.drive)),agir:avg((rounds||[]).filter(r=>r.gir!=null).map(r=>r.gir)),afir:avg((rounds||[]).filter(r=>r.fir!=null).map(r=>(r.fir/(r.firT||14))*100)),n:(rounds||[]).length};}
+
+async function compressImage(file){return new Promise(resolve=>{const reader=new FileReader();reader.onload=e=>{const img=new Image();img.onload=()=>{const maxW=1000,scale=Math.min(1,maxW/img.width);const canvas=document.createElement('canvas');canvas.width=img.width*scale;canvas.height=img.height*scale;canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL('image/jpeg',0.65));};img.src=e.target.result;};reader.readAsDataURL(file);});}
+$('photo-modal').addEventListener('click',()=>{$('photo-modal').style.display='none';});
+function showPhoto(src){$('photo-modal-img').src=src;$('photo-modal').style.display='flex';}
+
+function go(v,id){activeCharts.forEach(c=>c.destroy());activeCharts=[];view=v;selId=id||null;document.querySelectorAll('.nbtn').forEach(b=>b.classList.toggle('on',b.dataset.v===v));render();}
+$('nav').addEventListener('click',e=>{const b=e.target.closest('.nbtn');if(b)go(b.dataset.v);});
+$('logout-btn').addEventListener('click',()=>{me=null;clearSession();$('nav').style.display='none';$('user-bar').style.display='none';go('auth');});
+function render(){const m=main();if(view==='auth')rAuth(m);else if(view==='lb')rLB(m);else if(view==='log')rLog(m);else if(view==='det')rDet(m);else if(view==='cmp')rCmp(m);}
+
+function rAuth(el){
+  el.innerHTML=`<div class="auth-wrap"><div class="auth-tabs"><button class="atab ${authTab==='login'?'on':''}" id="tab-login">Sign In</button><button class="atab ${authTab==='register'?'on':''}" id="tab-register">Create Account</button></div>${authTab==='login'?`<div class="auth-title">Welcome back.</div><div class="auth-sub">Sign in to log rounds and track your season.</div><div class="fg"><label>Your Name</label><input id="l-name" type="text" placeholder="e.g. Tiger Woods" /></div><div class="fg"><label>Password</label><input id="l-pw" type="password" placeholder="••••••••" /></div><div class="err" id="auth-err"></div><button class="btnp" id="auth-submit">Sign In</button>`:`<div class="auth-title">Join the club.</div><div class="auth-sub">Create your account to join the leaderboard.</div><div class="fg"><label>Your Name</label><input id="r-name" type="text" placeholder="e.g. Tiger Woods" /></div><div class="fg"><label>Handicap Index</label><input id="r-hcp" type="number" step="0.1" min="-10" max="54" placeholder="e.g. 18.0" /></div><div class="fg"><label>Password</label><input id="r-pw" type="password" placeholder="Choose a password" /></div><div class="err" id="auth-err"></div><button class="btnp" id="auth-submit">Create Account</button>`}</div>`;
   el.querySelector('#tab-login').addEventListener('click',()=>{authTab='login';rAuth(el);});
   el.querySelector('#tab-register').addEventListener('click',()=>{authTab='register';rAuth(el);});
-  el.querySelector('#auth-submit').addEventListener('click', async()=>{
-    const errEl=el.querySelector('#auth-err'); errEl.textContent='';
-    const btn=el.querySelector('#auth-submit'); btn.disabled=true;
-    try {
-      let player;
-      if(authTab==='login'){
-        const name=el.querySelector('#l-name').value.trim(), pw=el.querySelector('#l-pw').value;
-        if(!name||!pw) throw new Error('Please fill in all fields.');
-        player=await api('POST','/api/login',{name,password:pw}); player._pw=pw;
-      } else {
-        const name=el.querySelector('#r-name').value.trim(), hcp=parseFloat(el.querySelector('#r-hcp').value), pw=el.querySelector('#r-pw').value;
-        if(!name||isNaN(hcp)||!pw) throw new Error('Please fill in all fields.');
-        if(pw.length<4) throw new Error('Password must be at least 4 characters.');
-        player=await api('POST','/api/players',{name,hcp,password:pw}); player._pw=pw;
-      }
-      me=player; saveSession();
-      players=await api('GET','/api/players');
-      const myFull=players.find(p=>p.id===me.id);
-      if(myFull) me={...me,rounds:myFull.rounds};
-      showApp();
-    } catch(e){ errEl.textContent=e.message; btn.disabled=false; }
+  el.querySelector('#auth-submit').addEventListener('click',async()=>{
+    const errEl=el.querySelector('#auth-err');errEl.textContent='';const btn=el.querySelector('#auth-submit');btn.disabled=true;
+    try{let player;if(authTab==='login'){const name=el.querySelector('#l-name').value.trim(),pw=el.querySelector('#l-pw').value;if(!name||!pw)throw new Error('Please fill in all fields.');player=await api('POST','/api/login',{name,password:pw});player._pw=pw;}else{const name=el.querySelector('#r-name').value.trim(),hcp=parseFloat(el.querySelector('#r-hcp').value),pw=el.querySelector('#r-pw').value;if(!name||isNaN(hcp)||!pw)throw new Error('Please fill in all fields.');if(pw.length<4)throw new Error('Password must be at least 4 characters.');player=await api('POST','/api/players',{name,hcp,password:pw});player._pw=pw;}me=player;saveSession();players=await api('GET','/api/players');const myFull=players.find(p=>p.id===me.id);if(myFull)me={...me,rounds:myFull.rounds};checkActivity();showApp();}catch(e){errEl.textContent=e.message;btn.disabled=false;}
   });
-  el.querySelectorAll('input').forEach(inp=>inp.addEventListener('keydown',e=>{ if(e.key==='Enter') el.querySelector('#auth-submit').click(); }));
+  el.querySelectorAll('input').forEach(inp=>inp.addEventListener('keydown',e=>{if(e.key==='Enter')el.querySelector('#auth-submit').click();}));
 }
-function showApp() {
-  $('user-name-label').textContent=me.name;
-  $('user-bar').style.display='flex';
-  $('nav').style.display='flex';
-  go('lb');
-}
-function rLB(el) {
+
+function showApp(){$('user-name-label').textContent=me.name;$('user-bar').style.display='flex';$('nav').style.display='flex';go('lb');}
+
+function rLB(el){
   const ps=sorted();
-  if(!ps.length){ el.innerHTML=`<div class="slbl">Standings</div><div class="empty"><strong>The course is empty.</strong>Be the first to create an account!</div>`; return; }
-  const rows=ps.map((p,i)=>{
-    const s=pstats(p.rounds); const rc=i===0?'g1':i===1?'g2':i===2?'g3':''; const n=p.rounds?.length||0; const isMe=me&&p.id===me.id;
-    return`<tr class="lbrow" data-id="${p.id}"><td><span class="rnk ${rc}">${i+1}</span></td><td><div class="pname">${esc(p.name)}${isMe?'<span class="pme">You</span>':''}</div>${n?`<div class="psub">${n} round${n!==1?'s':''} played</div>`:''}</td><td class="hv r">${p.hcp}</td><td class="sv r">${s.n||'—'}</td><td class="sv r">${s.avs!=null?s.avs.toFixed(1):'—'}</td><td class="sv r">${s.best!=null?s.best:'—'}</td></tr>`;
-  }).join('');
-  el.innerHTML=`<div class="slbl">Standings</div><table class="lbt"><thead><tr><th></th><th>Player</th><th class="r">HCP</th><th class="r">Rounds</th><th class="r">Avg Score</th><th class="r">Best</th></tr></thead><tbody>${rows}</tbody></table>`;
+  const allRounds=[];for(const p of players)for(const r of(p.rounds||[]))allRounds.push({player:p,round:r});
+  allRounds.sort((a,b)=>new Date(b.round.createdAt||0)-new Date(a.round.createdAt||0));
+  const recent=allRounds.slice(0,5);
+  const actHtml=recent.length?`<div class="slbl">Recent Activity</div><div class="activity" style="margin-bottom:28px">${recent.map(({player,round})=>`<div class="activity-item"><span>🏌️</span><span><strong style="color:var(--cream)">${esc(player.name)}</strong> logged a <strong style="color:var(--gold)">${round.score}</strong>${round.course?` at ${esc(round.course)}`:''}</span><span class="activity-time">${timeAgo(round.createdAt)}</span></div>`).join('')}</div>`:' ';
+  if(!ps.length){el.innerHTML=`${actHtml}<div class="slbl">Standings</div><div class="empty"><strong>The course is empty.</strong>Be the first to create an account!</div>`;return;}
+  const rows=ps.map((p,i)=>{const s=pstats(p.rounds);const rc=i===0?'g1':i===1?'g2':i===2?'g3':'';const earned=earnedBadges(p);const badgeStr=earned.slice(0,6).map(b=>b.emoji).join('');const isMe=me&&p.id===me.id;return`<tr class="lbrow" data-id="${p.id}"><td><span class="rnk ${rc}">${i+1}</span></td><td><div class="pname">${esc(p.name)}${isMe?'<span class="pme">You</span>':''}</div>${badgeStr?`<div class="pbadges">${badgeStr}</div>`:''}<div class="psub">${p.rounds?.length||0} round${p.rounds?.length!==1?'s':''} played</div></td><td class="hv r">${p.hcp}</td><td class="sv r">${s.n||'—'}</td><td class="sv r">${s.avs!=null?s.avs.toFixed(1):'—'}</td><td class="sv r">${s.best!=null?s.best:'—'}</td></tr>`;}).join('');
+  el.innerHTML=`${actHtml}<div class="slbl">Standings</div><table class="lbt"><thead><tr><th></th><th>Player</th><th class="r">HCP</th><th class="r">Rounds</th><th class="r">Avg Score</th><th class="r">Best</th></tr></thead><tbody>${rows}</tbody></table>`;
   el.querySelectorAll('.lbrow').forEach(r=>r.addEventListener('click',()=>go('det',r.dataset.id)));
 }
-function rLog(el) {
-  const today=new Date().toISOString().split('T')[0];
-  el.innerHTML=`<div class="fw">
-    <div class="ft">Log a Round</div>
-    <div class="fs">Logging as <strong style="color:var(--gold);font-style:normal">${esc(me.name)}</strong>.</div>
-    <div class="g2">
-      <div class="fg"><label>Date</label><input id="ld" type="date" value="${today}" /></div>
-      <div class="fg"><label>Course Name</label><input id="lc" type="text" placeholder="Augusta National…" /></div>
-    </div>
-    <div class="fsec">Score</div>
-    <div class="g2">
-      <div class="fg"><label>Gross Score</label><input id="lsc" type="number" min="50" max="200" placeholder="e.g. 84" /></div>
-      <div class="fg"><label>Course Par</label><input id="lpar" type="number" value="72" min="60" max="80" /></div>
-    </div>
-    <div class="fsec">On-Course Stats</div>
-    <div class="g3">
-      <div class="fg"><label>Fairways Hit</label><input id="lfir" type="number" min="0" max="18" placeholder="e.g. 9" /></div>
-      <div class="fg"><label>Of (Total FWs)</label><input id="lfirt" type="number" value="14" min="1" max="18" /></div>
-      <div class="fg"><label>GIR (of 18)</label><input id="lgir" type="number" min="0" max="18" placeholder="e.g. 7" /></div>
-    </div>
-    <div class="g3">
-      <div class="fg"><label>Total Putts</label><input id="lputts" type="number" min="0" placeholder="e.g. 34" /></div>
-      <div class="fg"><label>Avg Drive (yds)</label><input id="ldrv" type="number" min="0" placeholder="e.g. 245" /></div>
-      <div class="fg"><label>Penalties</label><input id="lpen" type="number" min="0" placeholder="e.g. 2" /></div>
-    </div>
-    <div class="fg"><label>Notes (optional)</label><textarea id="lnotes" rows="3" style="resize:vertical" placeholder="Birdied 18 from the rough…"></textarea></div>
-    <div class="err" id="log-err"></div>
-    <button class="btnp" id="lbtn">Save Round</button>
-  </div>`;
-  const gi=id=>{const v=el.querySelector(id).value; return v!==''?parseInt(v):null;};
-  el.querySelector('#lbtn').addEventListener('click', async()=>{
-    const sc=parseInt(el.querySelector('#lsc').value);
-    if(isNaN(sc)){el.querySelector('#log-err').textContent='Please enter a score.';return;}
-    const btn=el.querySelector('#lbtn'); btn.disabled=true;
-    try {
-      const round={password:me._pw,date:el.querySelector('#ld').value||today,course:el.querySelector('#lc').value.trim()||null,score:sc,par:gi('#lpar')||72,fir:gi('#lfir'),firT:gi('#lfirt')||14,gir:gi('#lgir'),putts:gi('#lputts'),drive:gi('#ldrv'),pen:gi('#lpen'),notes:el.querySelector('#lnotes').value.trim()||null};
-      await api('POST',`/api/players/${me.id}/rounds`,round);
-      players=await api('GET','/api/players');
-      const updated=players.find(p=>p.id===me.id);
-      if(updated) me={...me,rounds:updated.rounds};
-      notify('Round saved!'); go('lb');
-    } catch(e){ el.querySelector('#log-err').textContent=e.message; btn.disabled=false; }
+
+function rLog(el){
+  const today=new Date().toISOString().split('T')[0];let photoData=null;
+  el.innerHTML=`<div class="fw"><div class="ft">Log a Round</div><div class="fs">Logging as <strong style="color:var(--gold);font-style:normal">${esc(me.name)}</strong>.</div><div class="g2"><div class="fg"><label>Date</label><input id="ld" type="date" value="${today}" /></div><div class="fg"><label>Course Name</label><input id="lc" type="text" placeholder="Augusta National…" /></div></div><div class="fsec">Score</div><div class="g2"><div class="fg"><label>Gross Score</label><input id="lsc" type="number" min="50" max="200" placeholder="e.g. 105" /></div><div class="fg"><label>Course Par</label><input id="lpar" type="number" value="72" min="60" max="80" /></div></div><div class="fsec">Scoring Breakdown <span style="font-weight:normal;letter-spacing:0;text-transform:none;font-family:'Lora',serif;font-style:italic;opacity:.6;font-size:9px">(optional — should total 18)</span></div><div class="g3"><div class="fg"><label>🦅 Eagles+</label><input id="l-eagles" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>🐦 Birdies</label><input id="l-birdies" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>⛳ Pars</label><input id="l-pars" type="number" min="0" max="18" value="0" class="bd-inp" /></div></div><div class="g3"><div class="fg"><label>+1 Bogeys</label><input id="l-bogeys" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>+2 Doubles</label><input id="l-doubles" type="number" min="0" max="18" value="0" class="bd-inp" /></div><div class="fg"><label>+3 Triples+</label><input id="l-triples" type="number" min="0" max="18" value="0" class="bd-inp" /></div></div><div id="bd-total" class="bd-total">Total: 0 / 18</div><div class="fsec">On-Course Stats</div><div class="g3"><div class="fg"><label>Fairways Hit</label><input id="lfir" type="number" min="0" max="18" placeholder="e.g. 7" /></div><div class="fg"><label>Of (Total FWs)</label><input id="lfirt" type="number" value="14" min="1" max="18" /></div><div class="fg"><label>GIR (of 18)</label><input id="lgir" type="number" min="0" max="18" placeholder="e.g. 4" /></div></div><div class="g3"><div class="fg"><label>Total Putts</label><input id="lputts" type="number" min="0" placeholder="e.g. 36" /></div><div class="fg"><label>Avg Drive (yds)</label><input id="ldrv" type="number" min="0" placeholder="e.g. 210" /></div><div class="fg"><label>Penalties</label><input id="lpen" type="number" min="0" placeholder="e.g. 3" /></div></div><div class="fsec">Scorecard Photo <span style="font-weight:normal;letter-spacing:0;text-transform:none;font-family:'Lora',serif;font-style:italic;opacity:.6;font-size:9px">(optional)</span></div><div class="fg"><label>Upload Scorecard</label><input id="l-photo" type="file" accept="image/*" style="background:none;border:none;padding:0;color:var(--muted);font-size:13px" /><div id="photo-preview"></div></div><div class="fg"><label>Notes (optional)</label><textarea id="lnotes" rows="2" style="resize:vertical" placeholder="Birdied 18 from the rough…"></textarea></div><div class="err" id="log-err"></div><button class="btnp" id="lbtn">Save Round</button></div>`;
+  const updateTotal=()=>{const total=Array.from(el.querySelectorAll('.bd-inp')).reduce((s,i)=>s+(parseInt(i.value)||0),0);const div=el.querySelector('#bd-total');div.textContent=`Total: ${total} / 18`;div.className='bd-total'+(total===18?' ok':'');};
+  el.querySelectorAll('.bd-inp').forEach(i=>i.addEventListener('input',updateTotal));
+  el.querySelector('#l-photo').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;const prev=el.querySelector('#photo-preview');prev.innerHTML='<span style="font-size:12px;color:var(--muted);font-family:DM Mono,monospace">Compressing…</span>';photoData=await compressImage(file);prev.innerHTML=`<img src="${photoData}" class="photo-preview-img" />`;prev.querySelector('img').addEventListener('click',()=>showPhoto(photoData));});
+  const gi=id=>{const v=el.querySelector(id)?.value;return v!==''&&v!=null?parseInt(v):null;};
+  el.querySelector('#lbtn').addEventListener('click',async()=>{
+    const sc=parseInt(el.querySelector('#lsc').value);if(isNaN(sc)){el.querySelector('#log-err').textContent='Please enter a score.';return;}
+    const btn=el.querySelector('#lbtn');btn.disabled=true;
+    try{const round={password:me._pw,date:el.querySelector('#ld').value||today,course:el.querySelector('#lc').value.trim()||null,score:sc,par:gi('#lpar')||72,eagles:parseInt(el.querySelector('#l-eagles').value)||0,birdies:parseInt(el.querySelector('#l-birdies').value)||0,pars:parseInt(el.querySelector('#l-pars').value)||0,bogeys:parseInt(el.querySelector('#l-bogeys').value)||0,doubles:parseInt(el.querySelector('#l-doubles').value)||0,triples:parseInt(el.querySelector('#l-triples').value)||0,fir:gi('#lfir'),firT:gi('#lfirt')||14,gir:gi('#lgir'),putts:gi('#lputts'),drive:gi('#ldrv'),pen:gi('#lpen'),notes:el.querySelector('#lnotes').value.trim()||null,photo:photoData||null};await api('POST',`/api/players/${me.id}/rounds`,round);players=await api('GET','/api/players');const updated=players.find(p=>p.id===me.id);if(updated)me={...me,rounds:updated.rounds};notify('Round saved! 🏌️');go('lb');}catch(e){el.querySelector('#log-err').textContent=e.message;btn.disabled=false;}
   });
 }
-async function rDet(el) {
-  const player=players.find(p=>p.id===selId);
-  if(!player){go('lb');return;}
+
+async function rDet(el){
+  const player=players.find(p=>p.id===selId);if(!player){go('lb');return;}
   const rank=sorted().findIndex(p=>p.id===player.id)+1;
-  const rounds=player.rounds||[]; const s=pstats(rounds);
+  const rounds=player.rounds||[];const s=pstats(rounds);
   const sr=[...rounds].sort((a,b)=>new Date(b.date)-new Date(a.date));
   const isMe=me&&player.id===me.id;
-  const rrows=sr.map(r=>{
-    const diff=r.par!=null?r.score-r.par:null;
-    const rl=diff===null?'—':diff===0?'E':diff>0?`+${diff}`:String(diff);
-    const rc=diff===null?'':diff<0?'su':diff>0?'so':'se';
-    const firs=r.fir!=null?`${r.fir}/${r.firT||14}`:'—';
-    return`<tr><td>${r.date||'—'}</td><td style="color:var(--muted);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.course||'—')}</td><td style="font-weight:500;color:var(--cream)">${r.score}</td><td><span class="sp ${rc}">${rl}</span></td><td>${firs}</td><td>${r.gir!=null?r.gir+'/18':'—'}</td><td>${r.putts??'—'}</td><td>${r.drive?r.drive+'yd':'—'}</td><td>${r.pen??'—'}</td>${isMe?`<td><button class="db" data-rid="${r.id}">✕</button></td>`:'<td></td>'}</tr>`;
-  }).join('');
-  el.innerHTML=`
-    <button class="bbk" id="bbk">← Leaderboard</button>
-    <div class="phero">
-      <div>
-        <div class="phn">${esc(player.name)}${isMe?'<span class="pme" style="font-size:14px;vertical-align:middle;margin-left:10px">You</span>':''}</div>
-        <div class="phhl">Handicap Index<span class="phhv">${player.hcp}</span></div>
-        <div id="hea" style="margin-top:9px">${isMe?'<button class="btns" id="ehbtn">Update Handicap</button>':''}</div>
-      </div>
-      <div class="rbadge"><div class="rbl">Season Rank</div><div class="rbv">#${rank}</div></div>
-    </div>
-    <div class="slbl">Season Stats</div>
-    <div class="sg">
-      <div class="sc"><div class="scl">Rounds</div><div class="scv ac">${s.n}</div></div>
-      <div class="sc"><div class="scl">Avg Score</div><div class="scv">${s.avs!=null?s.avs.toFixed(1):'—'}</div></div>
-      <div class="sc"><div class="scl">Best Round</div><div class="scv">${s.best??'—'}</div></div>
-      <div class="sc"><div class="scl">Avg Putts</div><div class="scv">${s.aputts!=null?s.aputts.toFixed(1):'—'}</div></div>
-      <div class="sc"><div class="scl">Avg Drive</div><div class="scv">${s.adrive!=null?Math.round(s.adrive)+'yd':'—'}</div></div>
-      <div class="sc"><div class="scl">Avg GIR</div><div class="scv">${s.agir!=null?s.agir.toFixed(1)+'/18':'—'}</div></div>
-      <div class="sc"><div class="scl">FIR %</div><div class="scv">${s.afir!=null?Math.round(s.afir)+'%':'—'}</div></div>
-    </div>
-    ${sr.length?`<div class="slbl">Round History</div><div style="overflow-x:auto"><table class="rt"><thead><tr><th>Date</th><th>Course</th><th>Score</th><th>+/−</th><th>FIR</th><th>GIR</th><th>Putts</th><th>Drive</th><th>Pen.</th><th></th></tr></thead><tbody>${rrows}</tbody></table></div>`:`<div class="empty" style="padding:28px 0"><strong>No rounds logged yet.</strong>${isMe?'Head to "Log Round" to get started.':''}</div>`}
-  `;
+  const earned=earnedBadges(player);const locked=BADGES.filter(b=>!earned.find(e=>e.id===b.id));
+  const hasBreakdown=rounds.some(r=>r.pars!=null||r.bogeys!=null);
+  const totals={eagles:rounds.reduce((s,r)=>s+(r.eagles||0),0),birdies:rounds.reduce((s,r)=>s+(r.birdies||0),0),pars:rounds.reduce((s,r)=>s+(r.pars||0),0),bogeys:rounds.reduce((s,r)=>s+(r.bogeys||0),0),doubles:rounds.reduce((s,r)=>s+(r.doubles||0),0),triples:rounds.reduce((s,r)=>s+(r.triples||0),0)};
+  const totalHoles=Object.values(totals).reduce((a,b)=>a+b,0);
+  const rrows=sr.map(r=>{const diff=r.par!=null?r.score-r.par:null;const rl=diff===null?'—':diff===0?'E':diff>0?`+${diff}`:String(diff);const rc=diff===null?'':diff<0?'su':diff>0?'so':'se';const bdStr=(r.pars!=null||r.bogeys!=null)?`🦅${r.eagles||0} 🐦${r.birdies||0} ⛳${r.pars||0} +1:${r.bogeys||0} +2:${r.doubles||0} +3:${r.triples||0}`:'';return`<tr><td>${r.date||'—'}</td><td style="color:var(--muted);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.course||'—')}</td><td style="font-weight:500;color:var(--cream)">${r.score}</td><td><span class="sp ${rc}">${rl}</span></td><td style="font-size:10px;color:var(--muted)">${bdStr}</td><td>${r.putts??'—'}</td><td>${r.drive?r.drive+'yd':'—'}</td><td>${r.photo?`<img src="${r.photo}" class="thumb" />`:'—'}</td>${isMe?`<td><button class="db" data-rid="${r.id}">✕</button></td>`:'<td></td>'}</tr>`;}).join('');
+  el.innerHTML=`<button class="bbk" id="bbk">← Leaderboard</button><div class="phero"><div><div class="phn">${esc(player.name)}${isMe?'<span class="pme" style="font-size:14px;vertical-align:middle;margin-left:10px">You</span>':''}</div><div class="phhl">Handicap Index<span class="phhv">${player.hcp}</span></div><div id="hea" style="margin-top:9px">${isMe?'<button class="btns" id="ehbtn">Update Handicap</button>':''}</div></div><div class="rbadge-wrap"><div class="rbl">Season Rank</div><div class="rbv">#${rank}</div></div></div><div class="slbl">Season Stats</div><div class="sg"><div class="sc"><div class="scl">Rounds</div><div class="scv ac">${s.n}</div></div><div class="sc"><div class="scl">Avg Score</div><div class="scv">${s.avs!=null?s.avs.toFixed(1):'—'}</div></div><div class="sc"><div class="scl">Best Round</div><div class="scv">${s.best??'—'}</div></div><div class="sc"><div class="scl">Avg Putts</div><div class="scv">${s.aputts!=null?s.aputts.toFixed(1):'—'}</div></div><div class="sc"><div class="scl">Avg Drive</div><div class="scv">${s.adrive!=null?Math.round(s.adrive)+'yd':'—'}</div></div><div class="sc"><div class="scl">Avg GIR</div><div class="scv">${s.agir!=null?s.agir.toFixed(1)+'/18':'—'}</div></div><div class="sc"><div class="scl">FIR %</div><div class="scv">${s.afir!=null?Math.round(s.afir)+'%':'—'}</div></div></div><div class="slbl">Achievements <span style="font-size:11px;font-family:'Lora',serif;font-style:italic;letter-spacing:0;text-transform:none;color:var(--muted)">${earned.length} / ${BADGES.length} earned</span></div><div class="badge-grid">${[...earned,...locked].map(b=>`<div class="badge ${earned.includes(b)?'earned':'locked'}"><div class="badge-emoji">${b.emoji}</div><div class="badge-name">${b.name}</div><div class="badge-desc">${b.desc}</div></div>`).join('')}</div>${rounds.length>=2?`<div class="slbl">Score History</div><div class="chart-row"><div class="chart-box"><div class="chart-title">Score Per Round</div><canvas id="score-chart" height="160"></canvas></div><div class="chart-box"><div class="chart-title">Scoring Breakdown</div>${hasBreakdown&&totalHoles>0?'<canvas id="breakdown-chart" height="160"></canvas>':'<div class="chart-empty">Log scoring breakdown<br>when entering rounds.</div>'}</div></div>`:''} ${sr.length?`<div class="slbl">Round History</div><div style="overflow-x:auto"><table class="rt"><thead><tr><th>Date</th><th>Course</th><th>Score</th><th>+/−</th><th>Breakdown</th><th>Putts</th><th>Drive</th><th>📸</th><th></th></tr></thead><tbody>${rrows}</tbody></table></div>`:`<div class="empty" style="padding:28px 0"><strong>No rounds logged yet.</strong>${isMe?'Head to "Log Round" to get started.':''}</div>`}`;
   el.querySelector('#bbk').addEventListener('click',()=>go('lb'));
-  el.querySelector('#ehbtn')?.addEventListener('click',()=>{
-    const area=el.querySelector('#hea');
-    area.innerHTML=`<div class="he"><input id="hi" type="number" step="0.1" value="${player.hcp}" style="width:90px" /><button class="btns" id="hsv">Save</button><button class="btns" id="hcn">Cancel</button></div>`;
-    area.querySelector('#hsv').addEventListener('click', async()=>{
-      const v=parseFloat(area.querySelector('#hi').value); if(isNaN(v)) return;
-      try { await api('PATCH',`/api/players/${me.id}`,{hcp:v,password:me._pw}); me.hcp=v; const idx=players.findIndex(p=>p.id===me.id); if(idx!==-1) players[idx].hcp=v; notify('Handicap updated!'); rDet(el); } catch(e){notify(e.message);}
-    });
-    area.querySelector('#hcn').addEventListener('click',()=>rDet(el));
-  });
-  el.querySelectorAll('.db').forEach(b=>b.addEventListener('click', async()=>{
-    if(!confirm('Delete this round?')) return;
-    try { await api('DELETE',`/api/players/${me.id}/rounds/${b.dataset.rid}`,{password:me._pw}); players=await api('GET','/api/players'); const updated=players.find(p=>p.id===me.id); if(updated) me={...me,rounds:updated.rounds}; notify('Round deleted.'); rDet(el); } catch(e){notify(e.message);}
-  }));
+  el.querySelector('#ehbtn')?.addEventListener('click',()=>{const area=el.querySelector('#hea');area.innerHTML=`<div class="he"><input id="hi" type="number" step="0.1" value="${player.hcp}" style="width:90px" /><button class="btns" id="hsv">Save</button><button class="btns" id="hcn">Cancel</button></div>`;area.querySelector('#hsv').addEventListener('click',async()=>{const v=parseFloat(area.querySelector('#hi').value);if(isNaN(v))return;try{await api('PATCH',`/api/players/${me.id}`,{hcp:v,password:me._pw});me.hcp=v;const idx=players.findIndex(p=>p.id===me.id);if(idx!==-1)players[idx].hcp=v;notify('Handicap updated!');rDet(el);}catch(e){notify(e.message);}});area.querySelector('#hcn').addEventListener('click',()=>rDet(el));});
+  el.querySelectorAll('.db').forEach(b=>b.addEventListener('click',async()=>{if(!confirm('Delete this round?'))return;try{await api('DELETE',`/api/players/${me.id}/rounds/${b.dataset.rid}`,{password:me._pw});players=await api('GET','/api/players');const u=players.find(p=>p.id===me.id);if(u)me={...me,rounds:u.rounds};notify('Round deleted.');rDet(el);}catch(e){notify(e.message);}}));
+  el.querySelectorAll('.thumb').forEach(t=>t.addEventListener('click',()=>showPhoto(t.src)));
+  if(rounds.length>=2){setTimeout(()=>{const sc=el.querySelector('#score-chart');if(sc){const bd=[...rounds].sort((a,b)=>new Date(a.date)-new Date(b.date));activeCharts.push(new Chart(sc,{type:'line',data:{labels:bd.map(r=>fmtDate(r.date)),datasets:[{data:bd.map(r=>r.score),borderColor:'#c9a84c',backgroundColor:'rgba(201,168,76,.1)',borderWidth:2,pointBackgroundColor:'#c9a84c',pointRadius:4,fill:true,tension:.3}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{backgroundColor:'#0d1810',borderColor:'rgba(201,168,76,.38)',borderWidth:1,titleColor:'#c9a84c',bodyColor:'#d4cbb4',callbacks:{label:ctx=>`Score: ${ctx.raw}`}}},scales:{x:{grid:{color:'rgba(201,168,76,.07)'},ticks:{color:'#6b8572',font:{family:'DM Mono',size:10}}},y:{grid:{color:'rgba(201,168,76,.07)'},ticks:{color:'#6b8572',font:{family:'DM Mono',size:10}}}}}}));}const bdc=el.querySelector('#breakdown-chart');if(bdc&&hasBreakdown&&totalHoles>0){activeCharts.push(new Chart(bdc,{type:'doughnut',data:{labels:['Eagles+','Birdies','Pars','Bogeys','Doubles','Triples+'],datasets:[{data:[totals.eagles,totals.birdies,totals.pars,totals.bogeys,totals.doubles,totals.triples],backgroundColor:['#2a8a4a','#52a86e','#c9a84c','#b8a060','#c95a3a','#8b2020'],borderWidth:0}]},options:{responsive:true,cutout:'58%',plugins:{legend:{position:'right',labels:{color:'#d4cbb4',font:{family:'DM Mono',size:10},padding:10,boxWidth:11}},tooltip:{backgroundColor:'#0d1810',borderColor:'rgba(201,168,76,.38)',borderWidth:1,titleColor:'#c9a84c',bodyColor:'#d4cbb4',callbacks:{label:ctx=>totalHoles>0?`${ctx.label}: ${ctx.raw} (${Math.round(ctx.raw/totalHoles*100)}%)`:ctx.label}}}}}));}},50);}
 }
-async function init() {
-  try {
-    players=await api('GET','/api/players');
-    const session=getSession();
-    if(session){ try { const player=await api('POST','/api/login',{name:session.name,password:session.password}); player._pw=session.password; me=player; const myFull=players.find(p=>p.id===me.id); if(myFull) me={...me,rounds:myFull.rounds}; showApp(); return; } catch{clearSession();} }
-    go('auth');
-  } catch(e){ main().innerHTML=`<div class="ld">Could not connect to server.</div>`; }
+
+function rCmp(el){
+  if(players.length<2){el.innerHTML=`<div class="empty"><strong>Need at least 2 players.</strong>Add more players to use Compare.</div>`;return;}
+  if(!cmpIds[0])cmpIds[0]=players[0].id;
+  if(!cmpIds[1]||cmpIds[1]===cmpIds[0])cmpIds[1]=players.find(p=>p.id!==cmpIds[0])?.id;
+  const p1=players.find(p=>p.id===cmpIds[0]),p2=players.find(p=>p.id===cmpIds[1]);
+  const s1=pstats(p1?.rounds||[]),s2=pstats(p2?.rounds||[]);
+  const opts=sel=>players.map(pl=>`<option value="${pl.id}" ${pl.id===sel?'selected':''}>${esc(pl.name)}</option>`).join('');
+  const statRow=(label,v1,v2,lowerBetter=true)=>{const win1=v1!=null&&v2!=null&&(lowerBetter?v1<v2:v1>v2);const win2=v1!=null&&v2!=null&&(lowerBetter?v2<v1:v2>v1);const fmt=v=>v!=null?(typeof v==='number'&&!Number.isInteger(v)?v.toFixed(1):v):'—';return`<div class="cmp-card ${win1?'win':''}"><div class="cmp-label">${label}</div><div class="cmp-val">${fmt(v1)}</div></div><div class="cmp-card ${win2?'win':''}"><div class="cmp-label">${label}</div><div class="cmp-val">${fmt(v2)}</div></div>`;};
+  const e1=p1?earnedBadges(p1):[],e2=p2?earnedBadges(p2):[];
+  el.innerHTML=`<div class="cmp-header"><div class="fg" style="margin:0"><select id="cmp-s1">${opts(cmpIds[0])}</select></div><div class="vs">vs</div><div class="fg" style="margin:0"><select id="cmp-s2">${opts(cmpIds[1])}</select></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;text-align:center"><div><div class="cmp-name">${esc(p1?.name||'—')}</div><div class="cmp-hcp">HCP ${p1?.hcp??'—'} · ${e1.length} badges</div></div><div><div class="cmp-name">${esc(p2?.name||'—')}</div><div class="cmp-hcp">HCP ${p2?.hcp??'—'} · ${e2.length} badges</div></div></div><div class="slbl">Head to Head</div><div class="cmp-grid">${statRow('Avg Score',s1.avs,s2.avs,true)}${statRow('Best Round',s1.best,s2.best,true)}${statRow('Rounds Played',s1.n,s2.n,false)}${statRow('Avg Putts',s1.aputts,s2.aputts,true)}${statRow('Avg Drive',s1.adrive!=null?Math.round(s1.adrive):null,s2.adrive!=null?Math.round(s2.adrive):null,false)}${statRow('Avg GIR',s1.agir,s2.agir,false)}${statRow('FIR %',s1.afir!=null?Math.round(s1.afir):null,s2.afir!=null?Math.round(s2.afir):null,false)}${statRow('Handicap',p1?.hcp,p2?.hcp,true)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><div class="slbl">Badges — ${esc(p1?.name||'')}</div><div style="font-size:18px;letter-spacing:3px;line-height:2">${e1.map(b=>b.emoji).join(' ')||'<span style="font-size:13px;color:var(--muted);font-style:italic">None yet</span>'}</div></div><div><div class="slbl">Badges — ${esc(p2?.name||'')}</div><div style="font-size:18px;letter-spacing:3px;line-height:2">${e2.map(b=>b.emoji).join(' ')||'<span style="font-size:13px;color:var(--muted);font-style:italic">None yet</span>'}</div></div></div>`;
+  el.querySelector('#cmp-s1').addEventListener('change',e=>{cmpIds[0]=e.target.value;if(cmpIds[0]===cmpIds[1])cmpIds[1]=players.find(p=>p.id!==cmpIds[0])?.id;rCmp(el);});
+  el.querySelector('#cmp-s2').addEventListener('change',e=>{cmpIds[1]=e.target.value;if(cmpIds[1]===cmpIds[0])cmpIds[0]=players.find(p=>p.id!==cmpIds[1])?.id;rCmp(el);});
+}
+
+async function init(){
+  try{players=await api('GET','/api/players');const session=getSession();if(session){try{const player=await api('POST','/api/login',{name:session.name,password:session.password});player._pw=session.password;me=player;const myFull=players.find(p=>p.id===me.id);if(myFull)me={...me,rounds:myFull.rounds};checkActivity();showApp();return;}catch{clearSession();}}go('auth');}catch(e){main().innerHTML=`<div class="ld">Could not connect to server.</div>`;}
 }
 init();
 </script>
